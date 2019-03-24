@@ -12,6 +12,7 @@ BuildRequires:	automake
 BuildRequires:	libatf-c++-devel >= 0.20
 BuildRequires:	libtool
 BuildRequires:	lua53-devel
+BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define _testsdir %{_libexecdir}/lutok/tests
 
@@ -102,14 +103,14 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc AUTHORS COPYING NEWS README
-%{_docdir}/lutok-doc-%{version}
+%doc %{_docdir}/lutok-doc-%{version}
 %dir %{_libexecdir}/%{name}
 %{_testsdir}
 
 %files -n liblutok
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/liblutok.so.3
-%attr(755,root,root) %ghost %{_libdir}/liblutok.so.3.0.0
+%attr(755,root,root) %ghost %{_libdir}/liblutok.so.*.*.*
 
 %files -n liblutok-devel
 %defattr(644,root,root,755)
@@ -121,5 +122,3 @@ rm -rf $RPM_BUILD_ROOT
 %files -n liblutok-static
 %defattr(644,root,root,755)
 %{_libdir}/liblutok.a
-
-%changelog
