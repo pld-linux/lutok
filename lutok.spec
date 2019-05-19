@@ -1,9 +1,11 @@
 Summary:	Lightweight C++ API library for Lua
+Summary(pl.UTF-8):	Lekka biblioteka API C++ dla Lua
 Name:		lutok
 Version:	0.4
-Release:	1
+Release:	2
 License:	BSD
-Group:		Development/Libraries
+Group:		Libraries
+#Source0Download: https://github.com/jmmv/lutok/releases
 Source0:	https://github.com/jmmv/lutok/releases/download/%{name}-%{version}/lutok-%{version}.tar.gz
 # Source0-md5:	5da43895d9209f8c19d79433dd046b3f
 URL:		https://github.com/jmmv/lutok
@@ -14,7 +16,7 @@ BuildRequires:	libtool
 BuildRequires:	lua53-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define _testsdir %{_libexecdir}/lutok/tests
+%define		pkgtestsdir	%{_libexecdir}/lutok/tests
 
 %description
 Lutok provides thin C++ wrappers around the Lua C API to ease the
@@ -32,8 +34,25 @@ a Lua C binary library, Lutok adds several layers or abstraction and
 error checking that go against the original spirit of the Lua C API
 and thus degrade performance.
 
+%description -l pl.UTF-8
+Lutok udostępnia cienką warstwę obudowującą API C języka Lua, aby
+ułatwić współpracę między C++ a Lua. Interfejsy te intensywnie
+wykorzystują RAII (aby zapobiec wyciekowi zasobów), udostępniają
+typy danych przyjazne dla C++, zgłaszają błędy poprzez wyjątki i
+zapewniają, że stos Lua jest nienaruszony w przypadku błędów.
+Biblioteka udostępnia także mały podzbiór różnych funkcji
+narzędziowych, zbudowanych w oparciu o te interfejsy.
+
+Lutok skupia się na zapewnieniu czystego i bezpiecznego interfejsu
+C++; wadą jest to, że nie nadaje się w środowisku, gdzie krytyczna
+jest wydajność. Aby zaimplementować bezpieczne pod kątem błędów
+interfejsy C++ w oparciu o bibliotekę binarną C Lua, Lutok dodaje
+kilka warstw lub abstrakcji oraz sprawdzania błędów, niezgodnych z
+duchem API C Lua i zmniejszających wydajność.
+
 %package -n liblutok
 Summary:	Lutok library
+Summary(pl.UTF-8):	Biblioteka Lutok
 Group:		Libraries
 
 %description -n liblutok
@@ -52,22 +71,47 @@ a Lua C binary library, Lutok adds several layers or abstraction and
 error checking that go against the original spirit of the Lua C API
 and thus degrade performance.
 
+%description -n liblutok -l pl.UTF-8
+Lutok udostępnia cienką warstwę obudowującą API C języka Lua, aby
+ułatwić współpracę między C++ a Lua. Interfejsy te intensywnie
+wykorzystują RAII (aby zapobiec wyciekowi zasobów), udostępniają
+typy danych przyjazne dla C++, zgłaszają błędy poprzez wyjątki i
+zapewniają, że stos Lua jest nienaruszony w przypadku błędów.
+Biblioteka udostępnia także mały podzbiór różnych funkcji
+narzędziowych, zbudowanych w oparciu o te interfejsy.
+
+Lutok skupia się na zapewnieniu czystego i bezpiecznego interfejsu
+C++; wadą jest to, że nie nadaje się w środowisku, gdzie krytyczna
+jest wydajność. Aby zaimplementować bezpieczne pod kątem błędów
+interfejsy C++ w oparciu o bibliotekę binarną C Lua, Lutok dodaje
+kilka warstw lub abstrakcji oraz sprawdzania błędów, niezgodnych z
+duchem API C Lua i zmniejszających wydajność.
+
 %package -n liblutok-devel
-Summary:	Libraries and header files for Lutok development
+Summary:	Header files for Lutok development
+Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki Lutok
 Requires:	liblutok = %{version}-%{release}
 Requires:	lua-devel >= 5.1
 
 %description -n liblutok-devel
-Provides the libraries and header files to develop applications that
-use the Lutok C++ API to Lua.
+The header files to develop applications that use the Lutok C++ API to
+Lua.
+
+%description -n liblutok-devel -l pl.UTF-8
+Pliki nagłówkowe do tworzenia aplikacji wykorzystująch API C++
+biblioteki Lutok do Lua.
 
 %package -n liblutok-static
 Summary:	Static liblutok library
+Summary(pl.UTF-8):	Statyczna biblioteka liblutok
 Group:		Development/Libraries
 Requires:	liblutok-devel = %{version}-%{release}
 
 %description -n liblutok-static
 Static liblutok library.
+
+%description -n liblutok-static -l pl.UTF-8
+Statyczna biblioteka liblutok.
 
 %prep
 %setup -q
@@ -79,20 +123,24 @@ Static liblutok library.
 %{__autoheader}
 %{__automake}
 %configure \
-	--with-atf=yes \
-	--with-doxygen \
 	--docdir=%{_docdir}/lutok-doc-%{version} \
-	--htmldir=%{_docdir}/lutok-doc-%{version}/html
+	--htmldir=%{_docdir}/lutok-doc-%{version}/html \
+	--with-atf \
+	--with-doxygen
 
 %{__make} \
-	testsdir=%{_testsdir}
+	testsdir=%{pkgtestsdir}
 
 %install
 rm -rf $RPM_BUILD_ROOT
+
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
 	doc_DATA= \
-	testsdir=%{_testsdir}
+	testsdir=%{pkgtestsdir}
+
+# obsoleted by pkg-config
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/liblutok.la
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -105,18 +153,17 @@ rm -rf $RPM_BUILD_ROOT
 %doc AUTHORS COPYING NEWS README
 %doc %{_docdir}/lutok-doc-%{version}
 %dir %{_libexecdir}/%{name}
-%{_testsdir}
+%{pkgtestsdir}
 
 %files -n liblutok
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/liblutok.so.3
-%attr(755,root,root) %ghost %{_libdir}/liblutok.so.*.*.*
+%attr(755,root,root) %{_libdir}/liblutok.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/liblutok.so.3
 
 %files -n liblutok-devel
 %defattr(644,root,root,755)
-%{_includedir}/lutok
 %attr(755,root,root) %{_libdir}/liblutok.so
-%{_libdir}/liblutok.la
+%{_includedir}/lutok
 %{_pkgconfigdir}/lutok.pc
 
 %files -n liblutok-static
