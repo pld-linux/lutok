@@ -122,6 +122,7 @@ Statyczna biblioteka liblutok.
 %{__autoconf}
 %{__autoheader}
 %{__automake}
+cat configure
 %configure \
 	--docdir=%{_docdir}/lutok-doc-%{version} \
 	--htmldir=%{_docdir}/lutok-doc-%{version}/html \
