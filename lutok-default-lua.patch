@@ -1,0 +1,30 @@
+--- lutok-0.4/m4/lua.m4.orig	2013-10-11 23:44:43.000000000 +0200
++++ lutok-0.4/m4/lua.m4	2020-10-26 06:21:59.318204354 +0100
+@@ -34,7 +34,11 @@
+ AC_DEFUN([KYUA_LUA], [
+     lua_found=no
+ 
+-    for lua_release in 5.2 5.1; do
++    PKG_CHECK_MODULES([LUA], [lua >= 5.1],
++                      [lua_found=yes], [true])
++
++    if test "${lua_found}" = no; then
++    for lua_release in 5.4 5.3 5.2 5.1; do
+         if test "${lua_found}" = no; then
+             PKG_CHECK_MODULES([LUA], [lua${lua_release} >= ${lua_release}],
+                               [lua_found=yes], [true])
+@@ -43,13 +47,10 @@
+             PKG_CHECK_MODULES([LUA], [lua-${lua_release} >= ${lua_release}],
+                               [lua_found=yes], [true])
+         fi
+-        if test "${lua_found}" = no; then
+-            PKG_CHECK_MODULES([LUA], [lua >= ${lua_release}],
+-                              [lua_found=yes], [true])
+-        fi
+ 
+         test "${lua_found}" = no || break
+     done
++    fi
+ 
+     if test "${lua_found}" = no; then
+         AC_PATH_PROGS([LUA_CONFIG], [lua-config], [unset])

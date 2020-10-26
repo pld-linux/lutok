@@ -2,18 +2,19 @@ Summary:	Lightweight C++ API library for Lua
 Summary(pl.UTF-8):	Lekka biblioteka API C++ dla Lua
 Name:		lutok
 Version:	0.4
-Release:	3
+Release:	4
 License:	BSD
 Group:		Libraries
 #Source0Download: https://github.com/jmmv/lutok/releases
 Source0:	https://github.com/jmmv/lutok/releases/download/%{name}-%{version}/lutok-%{version}.tar.gz
 # Source0-md5:	5da43895d9209f8c19d79433dd046b3f
+Patch0:		%{name}-default-lua.patch
 URL:		https://github.com/jmmv/lutok
-BuildRequires:	autoconf
-BuildRequires:	automake
+BuildRequires:	autoconf >= 2.65
+BuildRequires:	automake >= 1:1.9
 BuildRequires:	libatf-c++-devel >= 0.20
 BuildRequires:	libatf-sh-devel >= 0.20
-BuildRequires:	libtool
+BuildRequires:	libtool >= 2:2
 BuildRequires:	lua53-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -116,6 +117,7 @@ Statyczna biblioteka liblutok.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 %{__libtoolize}
