@@ -15,7 +15,7 @@ BuildRequires:	automake >= 1:1.9
 BuildRequires:	libatf-c++-devel >= 0.20
 BuildRequires:	libatf-sh-devel >= 0.20
 BuildRequires:	libtool >= 2:2
-BuildRequires:	lua53-devel
+BuildRequires:	lua-devel >= 5.1
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		pkgtestsdir	%{_libexecdir}/lutok/tests
