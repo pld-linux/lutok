@@ -1,19 +1,20 @@
 Summary:	Lightweight C++ API library for Lua
 Summary(pl.UTF-8):	Lekka biblioteka API C++ dla Lua
 Name:		lutok
-Version:	0.4
-Release:	4
+Version:	0.5
+Release:	1
 License:	BSD
 Group:		Libraries
 #Source0Download: https://github.com/jmmv/lutok/releases
-Source0:	https://github.com/jmmv/lutok/releases/download/%{name}-%{version}/lutok-%{version}.tar.gz
-# Source0-md5:	5da43895d9209f8c19d79433dd046b3f
+Source0:	https://github.com/jmmv/lutok/archive/%{name}-%{version}/lutok-%{version}.tar.gz
+# Source0-md5:	4773caf9dcfbfa58358d1cd8718d4430
 Patch0:		%{name}-default-lua.patch
 URL:		https://github.com/jmmv/lutok
-BuildRequires:	autoconf >= 2.65
+BuildRequires:	autoconf >= 2.68
 BuildRequires:	automake >= 1:1.9
 BuildRequires:	libatf-c++-devel >= 0.20
 BuildRequires:	libatf-sh-devel >= 0.20
+BuildRequires:	libstdc++-devel >= 6:4.7
 BuildRequires:	libtool >= 2:2
 BuildRequires:	lua-devel >= 5.1
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -116,7 +117,7 @@ Static liblutok library.
 Statyczna biblioteka liblutok.
 
 %prep
-%setup -q
+%setup -q -n %{name}-%{name}-%{version}
 %patch0 -p1
 
 %build
@@ -153,7 +154,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS COPYING NEWS README
+%doc AUTHORS COPYING NEWS.md README.md
 %doc %{_docdir}/lutok-doc-%{version}
 %dir %{_libexecdir}/%{name}
 %{pkgtestsdir}

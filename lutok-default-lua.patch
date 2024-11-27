@@ -1,19 +1,17 @@
---- lutok-0.4/m4/lua.m4.orig	2013-10-11 23:44:43.000000000 +0200
-+++ lutok-0.4/m4/lua.m4	2020-10-26 06:21:59.318204354 +0100
-@@ -34,7 +34,11 @@
+--- lutok-lutok-0.5/m4/lua.m4.orig	2024-11-26 02:09:07.000000000 +0100
++++ lutok-lutok-0.5/m4/lua.m4	2024-11-27 19:34:41.919832785 +0100
+@@ -34,6 +34,10 @@ dnl
  AC_DEFUN([KYUA_LUA], [
      lua_found=no
  
--    for lua_release in 5.2 5.1; do
 +    PKG_CHECK_MODULES([LUA], [lua >= 5.1],
 +                      [lua_found=yes], [true])
 +
 +    if test "${lua_found}" = no; then
-+    for lua_release in 5.4 5.3 5.2 5.1; do
+     for lua_release in ${LUA_VERSION:-5.4 5.3 5.2 5.1}; do
          if test "${lua_found}" = no; then
              PKG_CHECK_MODULES([LUA], [lua${lua_release} >= ${lua_release}],
-                               [lua_found=yes], [true])
-@@ -43,13 +47,10 @@
+@@ -43,13 +47,10 @@ AC_DEFUN([KYUA_LUA], [
              PKG_CHECK_MODULES([LUA], [lua-${lua_release} >= ${lua_release}],
                                [lua_found=yes], [true])
          fi
